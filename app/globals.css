@@ -1,26 +1,538 @@
 @import "tailwindcss";
 
+@plugin "daisyui" {
+  themes: false;
+}
+
+
+
+/* =====================================================
+   SSST CLAYMORPHISM DESIGN SYSTEM
+   ===================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors */
+  --saffron: #FF6B00;
+  --saffron-light: #FF8534;
+  --saffron-pale: #FFF0E6;
+  --gold: #F5A623;
+  --gold-pale: #FFF8E7;
+  --navy: #1A1F36;
+  --navy-light: #252B45;
+
+  /* Claymorphism Palette */
+  --clay-bg: #F5F0EB;
+  --clay-surface: #FAF7F4;
+  --clay-white: #FFFFFF;
+  --clay-cream: #FFF9F5;
+
+  /* Clay Shadows — the heart of claymorphism */
+  --clay-shadow-sm:
+    4px 4px 10px rgba(0, 0, 0, 0.10),
+    -2px -2px 8px rgba(255, 255, 255, 0.90),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+
+  --clay-shadow-md:
+    6px 6px 16px rgba(0, 0, 0, 0.12),
+    -3px -3px 12px rgba(255, 255, 255, 0.92),
+    inset 0 2px 0 rgba(255, 255, 255, 0.75);
+
+  --clay-shadow-lg:
+    10px 10px 28px rgba(0, 0, 0, 0.14),
+    -5px -5px 18px rgba(255, 255, 255, 0.95),
+    inset 0 2px 0 rgba(255, 255, 255, 0.80);
+
+  --clay-shadow-inset:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.10),
+    inset -2px -2px 8px rgba(255, 255, 255, 0.70);
+
+  --clay-shadow-saffron:
+    6px 6px 18px rgba(255, 107, 0, 0.30),
+    -3px -3px 12px rgba(255, 255, 255, 0.90),
+    inset 0 2px 0 rgba(255, 255, 255, 0.30);
+
+  --clay-shadow-saffron-pressed:
+    2px 2px 8px rgba(255, 107, 0, 0.30),
+    inset 2px 2px 8px rgba(0, 0, 0, 0.15);
+
+  /* Border radius */
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 24px;
+  --r-2xl: 32px;
+  --r-full: 9999px;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', 'Plus Jakarta Sans', sans-serif;
+
+  /* Text */
+  --text-primary: #0F1520;
+  --text-secondary: #1F2937;
+  --text-muted: #3D4468;
+  --text-light: #6B7280;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.70);
+  --border-dark: rgba(0, 0, 0, 0.06);
+
+  /* Sidebar */
+  --sidebar-w: 260px;
+
+  /* Semantic */
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --info: #3B82F6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Reset / Base ─────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-main);
+  background: var(--clay-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body[lang="hi"],
+.hindi {
+  font-family: var(--font-hindi);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.20);
+}
+
+/* ── Clay Component Utilities ─────────────────────── */
+
+/* Clay Card — the core building block */
+.clay-card {
+  background: var(--clay-white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--clay-shadow-md);
+  border: 1.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.clay-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.60) 0%, transparent 60%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.clay-card-sm {
+  box-shadow: var(--clay-shadow-sm);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--clay-white);
+  position: relative;
+}
+
+.clay-card-sm::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.55) 0%, transparent 55%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.clay-card-lg {
+  background: var(--clay-white);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--clay-shadow-lg);
+  border: 1.5px solid var(--border);
+  position: relative;
+}
+
+.clay-card-lg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.65) 0%, transparent 55%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Clay Button — Base */
+.clay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: var(--r-full);
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.clay-btn-primary {
+  background: linear-gradient(145deg, #FF8534 0%, #FF6B00 60%, #E55A00 100%);
+  color: white;
+  box-shadow: var(--clay-shadow-saffron);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+}
+
+.clay-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 8px 8px 24px rgba(255, 107, 0, 0.35), -3px -3px 12px rgba(255, 255, 255, 0.90);
+}
+
+.clay-btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: var(--clay-shadow-saffron-pressed);
+}
+
+.clay-btn-secondary {
+  background: linear-gradient(145deg, #FFFFFF 0%, #F0EDE8 100%);
+  color: var(--text-primary);
+  box-shadow: var(--clay-shadow-md);
+}
+
+.clay-btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
+.clay-btn-secondary:active {
+  box-shadow: var(--clay-shadow-inset);
+  transform: translateY(1px);
+}
+
+.clay-btn-danger {
+  background: linear-gradient(145deg, #F87171 0%, #EF4444 100%);
+  color: white;
+  box-shadow: 6px 6px 16px rgba(239, 68, 68, 0.30), -3px -3px 10px rgba(255, 255, 255, 0.90);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.clay-btn-danger:hover {
+  transform: translateY(-1px);
+}
+
+.clay-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.clay-btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Clay Input */
+.clay-input {
+  width: 100%;
+  background: linear-gradient(145deg, #EDEBE8 0%, #F5F3F0 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.70);
+  border-radius: var(--r-md);
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  box-shadow: var(--clay-shadow-inset);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.clay-input::placeholder {
+  color: var(--text-muted);
+}
+
+.clay-input:focus {
+  border-color: rgba(255, 107, 0, 0.40);
+  box-shadow: var(--clay-shadow-inset), 0 0 0 3px rgba(255, 107, 0, 0.10);
+  background: linear-gradient(145deg, #E8E5DF 0%, #F0EDE8 100%);
+}
+
+.clay-input.error {
+  border-color: rgba(239, 68, 68, 0.40);
+  box-shadow: var(--clay-shadow-inset), 0 0 0 3px rgba(239, 68, 68, 0.10);
+}
+
+/* Clay Badge */
+.clay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Clay Sidebar */
+.clay-sidebar {
+  background: linear-gradient(160deg, #1A1F36 0%, #252B45 100%);
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.clay-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent, rgba(255, 255, 255, 0.04));
+}
+
+/* Clay Nav Item */
+.clay-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.clay-nav-item:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.clay-nav-item.active {
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.90) 0%, rgba(245, 166, 35, 0.85) 100%);
+  color: white;
+  box-shadow: 4px 4px 14px rgba(255, 107, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+/* Clay Table */
+.clay-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13.5px;
+}
+
+.clay-table th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: linear-gradient(145deg, #F0EDE8, #EAE7E2);
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.clay-table th:first-child {
+  border-radius: var(--r-sm) 0 0 0;
+}
+
+.clay-table th:last-child {
+  border-radius: 0 var(--r-sm) 0 0;
+}
+
+.clay-table td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.045);
+  vertical-align: middle;
+}
+
+.clay-table tr:hover td {
+  background: rgba(255, 107, 0, 0.025);
+}
+
+.clay-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Stat Card Gradient Variants ───────────────────── */
+.clay-stat-saffron {
+  background: linear-gradient(135deg, #FF8534 0%, #FF6B00 100%);
+  box-shadow: 6px 6px 20px rgba(255, 107, 0, 0.30), -3px -3px 12px rgba(255, 255, 255, 0.95);
+}
+
+.clay-stat-emerald {
+  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  box-shadow: 6px 6px 20px rgba(16, 185, 129, 0.28), -3px -3px 12px rgba(255, 255, 255, 0.95);
+}
+
+.clay-stat-blue {
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  box-shadow: 6px 6px 20px rgba(59, 130, 246, 0.28), -3px -3px 12px rgba(255, 255, 255, 0.95);
+}
+
+.clay-stat-purple {
+  background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
+  box-shadow: 6px 6px 20px rgba(139, 92, 246, 0.28), -3px -3px 12px rgba(255, 255, 255, 0.95);
+}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes toastSlide {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.anim-fade-up {
+  animation: fadeUp 0.28s ease both;
+}
+
+.anim-slide-left {
+  animation: slideInLeft 0.25s ease both;
+}
+
+.anim-scale-in {
+  animation: scaleIn 0.22s ease both;
+}
+
+.anim-toast {
+  animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.anim-spin {
+  animation: spin 0.75s linear infinite;
+}
+
+.anim-pulse {
+  animation: pulse 1.5s ease infinite;
+}
+
+/* Stagger delays */
+.delay-1 {
+  animation-delay: 0.05s;
+}
+
+.delay-2 {
+  animation-delay: 0.10s;
+}
+
+.delay-3 {
+  animation-delay: 0.15s;
+}
+
+.delay-4 {
+  animation-delay: 0.20s;
+}
+
+/* ── Focus Styles ─────────────────────────────────── */
+*:focus-visible {
+  outline: 2.5px solid rgba(255, 107, 0, 0.60);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ── Print ────────────────────────────────────────── */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  body {
+    background: white;
+  }
 }
