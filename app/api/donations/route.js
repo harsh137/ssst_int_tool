@@ -18,9 +18,24 @@ async function getUser(req) {
 // Generate unique receipt number (e.g. REC-2026-0001)
 async function generateReceiptNumber() {
     const year = new Date().getFullYear();
-    const count = await Donation.countDocuments();
-    const sequence = (count + 1).toString().padStart(4, '0');
-    return `REC-${year}-${sequence}`;
+    const prefix = `REC-${year}-`;
+
+    // Find the latest donation for this year to get the highest sequence
+    const latestDonation = await Donation.findOne({
+        receiptNumber: new RegExp(`^${prefix}`)
+    }).sort({ receiptNumber: -1 });
+
+    let nextSequence = 1;
+    if (latestDonation && latestDonation.receiptNumber) {
+        const lastParts = latestDonation.receiptNumber.split('-');
+        const lastSeq = parseInt(lastParts[lastParts.length - 1]);
+        if (!isNaN(lastSeq)) {
+            nextSequence = lastSeq + 1;
+        }
+    }
+
+    const sequence = nextSequence.toString().padStart(4, '0');
+    return `${prefix}${sequence}`;
 }
 
 export async function GET(req) {
@@ -28,8 +43,17 @@ export async function GET(req) {
         const user = await getUser(req);
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+        const { searchParams } = new URL(req.url);
+        const utsavId = searchParams.get('utsavId');
+        const fundType = searchParams.get('fundType');
+
         await connectDB();
-        const donations = await Donation.find({}).sort({ createdAt: -1 });
+
+        const filter = {};
+        if (utsavId) filter.utsavId = utsavId;
+        if (fundType) filter.fundType = fundType;
+
+        const donations = await Donation.find(filter).sort({ createdAt: -1 });
 
         return NextResponse.json({ success: true, donations });
     } catch (error) {

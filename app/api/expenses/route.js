@@ -21,7 +21,7 @@ export async function GET(req) {
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         await connectDB();
-        const expenses = await Expense.find({}).sort({ date: -1, createdAt: -1 });
+        const expenses = await Expense.find({}).sort({ createdAt: -1 });
 
         return NextResponse.json({ success: true, expenses });
     } catch (error) {

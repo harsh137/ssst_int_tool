@@ -71,7 +71,7 @@ export default function NewDonationPage() {
     };
 
     const handleUtsavSelect = (utsav) => {
-        setForm((f) => ({ ...f, utsavId: utsav.id, utsavName: utsav.name }));
+        setForm((f) => ({ ...f, utsavId: utsav._id, utsavName: utsav.name }));
         setErrors((e) => ({ ...e, utsavId: '' }));
     };
 
@@ -259,7 +259,7 @@ export default function NewDonationPage() {
                                 ) : (
                                     <div className="space-y-2">
                                         {activeUtsavs.map((u) => {
-                                            const isSelected = form.utsavId === u.id;
+                                            const isSelected = form.utsavId === u._id;
                                             return (
                                                 <button key={u._id} type="button" onClick={() => handleUtsavSelect(u)}
                                                     className="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all"

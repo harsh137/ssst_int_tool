@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/context/AuthContext';
 import { useLang } from '@/lib/context/LangContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { toast } from '@/components/ui/Toast';
+import { formatINR, formatDate } from '@/lib/data/mockData';
 
 const STEPS = ['donorInfo', 'paymentInfo', 'review'];
 const FUND_OPTS = [
@@ -77,12 +78,13 @@ export default function EditDonationPage() {
                     });
                     if (d.upiScreenshotUrl) setUpiPreview(d.upiScreenshotUrl);
                 } else {
-                    toast.error('Failed to load donation details');
+                    toast.error(dData.error || 'Failed to load donation details');
                     router.push('/dashboard/donations');
                 }
             } catch (err) {
                 console.error('Failed to load edit data', err);
-                toast.error('Network error loading donation');
+                toast.error('Network error. Check your connection or permissions.');
+                router.push('/dashboard/donations');
             } finally {
                 setIsLoading(false);
             }
@@ -98,7 +100,7 @@ export default function EditDonationPage() {
     };
 
     const handleUtsavSelect = (utsav) => {
-        setForm((f) => ({ ...f, utsavId: utsav.id, utsavName: utsav.name }));
+        setForm((f) => ({ ...f, utsavId: utsav._id, utsavName: utsav.name }));
         setErrors((e) => ({ ...e, utsavId: '' }));
     };
 
@@ -287,11 +289,11 @@ export default function EditDonationPage() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-2">
                                         {activeUtsavs.map((u) => (
-                                            <button key={u._id} onClick={() => handleUtsavSelect({ id: u._id, name: u.nameEn })}
+                                            <button key={u._id} onClick={() => handleUtsavSelect(u)}
                                                 className={`px-3 py-1.5 text-xs font-bold rounded-lg border text-left truncate transition-colors
                                                 ${form.utsavId === u._id ? 'bg-red-500 text-white border-red-600 shadow-sm' : 'bg-white text-red-700 border-red-200 hover:bg-red-100'}
                                             `}>
-                                                {lang === 'hi' ? u.nameHi : u.nameEn}
+                                                {lang === 'hi' ? u.nameHi : u.name}
                                             </button>
                                         ))}
                                     </div>

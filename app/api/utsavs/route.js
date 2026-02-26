@@ -26,10 +26,35 @@ export async function GET(req) {
         await connectDB();
 
         const query = includeCompleted ? {} : { status: 'active' };
-        const utsavs = await Utsav.find(query).sort({ startDate: -1 });
+        const utsavs = await Utsav.find(query).sort({ createdAt: -1 }).lean();
 
-        return NextResponse.json({ success: true, utsavs });
+        // Fetch aggregation for each utsav
+        const Donation = (await import('@/lib/models/Donation')).default;
+
+        const stats = await Donation.aggregate([
+            { $match: { fundType: 'utsav' } },
+            {
+                $group: {
+                    _id: '$utsavId',
+                    totalAmount: { $sum: '$amount' },
+                    donorCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        // Map stats back to utsavs
+        const utsavsWithStats = utsavs.map(u => {
+            const s = stats.find(stat => stat._id === u._id.toString());
+            return {
+                ...u,
+                totalAmount: s ? s.totalAmount : 0,
+                donorCount: s ? s.donorCount : 0
+            };
+        });
+
+        return NextResponse.json({ success: true, utsavs: utsavsWithStats });
     } catch (error) {
+        console.error('Utsav List Error:', error);
         return NextResponse.json({ error: 'Server Error' }, { status: 500 });
     }
 }

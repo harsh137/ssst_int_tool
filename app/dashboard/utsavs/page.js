@@ -11,7 +11,7 @@ import { toast } from '@/components/ui/Toast';
 
 const EMPTY_FORM = {
     name: '', nameHi: '', description: '',
-    startDate: '', endDate: '', targetAmount: '', isActive: true,
+    startDate: '', endDate: '', targetAmount: 0, status: 'active',
 };
 
 export default function UtsavsPage() {
@@ -26,12 +26,14 @@ export default function UtsavsPage() {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [selectedDonations, setSelectedDonations] = useState([]);
+    const [loadingDonations, setLoadingDonations] = useState(false);
 
     const canCreate = hasPermission(currentUser, PERMISSIONS.USER_CREATE);
 
     const reload = async () => {
         try {
-            const res = await fetch('/api/utsavs?all=true');
+            const res = await fetch('/api/utsavs?includeCompleted=true');
             const data = await res.json();
             if (data.success) setUtsavs(data.utsavs);
         } catch { toast.error('Failed to load Utsavs'); }
@@ -39,11 +41,42 @@ export default function UtsavsPage() {
 
     useEffect(() => { reload(); }, []);
 
+    useEffect(() => {
+        const fetchDonations = async () => {
+            if (!selected) {
+                setSelectedDonations([]);
+                return;
+            }
+            setLoadingDonations(true);
+            try {
+                // We'll filter donations by utsavId on the client since we already have the donations API
+                // Or better, fetch specifically for this utsav if we had an endpoint.
+                // For now, let's just fetch from the general donations API with a filter.
+                const res = await fetch(`/api/donations?utsavId=${selected._id}`);
+                const data = await res.json();
+                if (data.success) setSelectedDonations(data.donations);
+            } catch {
+                toast.error('Failed to load donations');
+            } finally {
+                setLoadingDonations(false);
+            }
+        };
+        fetchDonations();
+    }, [selected]);
+
     const set = (k, v) => { setForm((f) => ({ ...f, [k]: v })); setErrors((e) => ({ ...e, [k]: '' })); };
 
     const openCreate = () => { setForm(EMPTY_FORM); setEditTarget(null); setErrors({}); setModalOpen(true); };
     const openEdit = (u) => {
-        setForm({ name: u.name, nameHi: u.nameHi, description: u.description, startDate: u.startDate, endDate: u.endDate, targetAmount: u.targetAmount, isActive: u.isActive });
+        setForm({
+            name: u.name || '',
+            nameHi: u.nameHi || '',
+            description: u.description || '',
+            startDate: u.startDate || '',
+            endDate: u.endDate || '',
+            targetAmount: u.targetAmount || 0,
+            status: u.status || 'active'
+        });
         setEditTarget(u); setErrors({}); setModalOpen(true);
     };
 
@@ -94,34 +127,43 @@ export default function UtsavsPage() {
     const handleDelete = async () => {
         try {
             const res = await fetch(`/api/utsavs/${deleteTarget._id}`, { method: 'DELETE' });
-            if (res.ok) {
+            const data = await res.json();
+
+            if (res.ok && data.success) {
                 if (selected?._id === deleteTarget._id) setSelected(null);
                 setDeleteTarget(null);
                 reload();
                 toast.warning(lang === 'hi' ? 'उत्सव हटाया गया' : 'Utsav deleted');
+            } else {
+                toast.error(data.error || 'Failed to delete');
             }
         } catch { toast.error('Failed to delete'); }
     };
 
     const handleToggleActive = async (utsav) => {
+        const isActive = utsav.status === 'active';
         try {
             const res = await fetch(`/api/utsavs/${utsav._id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ isActive: !utsav.isActive })
+                body: JSON.stringify({ status: isActive ? 'completed' : 'active' })
             });
             if (res.ok) {
                 reload();
                 toast.info(lang === 'hi'
-                    ? `उत्सव ${utsav.isActive ? 'निष्क्रिय' : 'सक्रिय'} किया गया`
-                    : `Utsav ${utsav.isActive ? 'deactivated' : 'activated'}`);
+                    ? `उत्सव ${isActive ? 'निष्क्रिय' : 'सक्रिय'} किया गया`
+                    : `Utsav ${isActive ? 'deactivated' : 'activated'}`);
             }
         } catch { toast.error('Failed to toggle status'); }
     };
 
     const inputCls = (k) => `clay-input ${errors[k] ? 'error' : ''}`;
-    // TODO: Dynamic donation fetching per Utsav could be added, for now use a default 0 array.
-    const selectedSummary = selected ? { total: 0, count: 0, donations: [] } : null;
+
+    const selectedSummary = selected ? {
+        total: selected.totalAmount || 0,
+        count: selected.donorCount || 0,
+        donations: selectedDonations
+    } : null;
 
     /* ─── Shared card style ─── */
     const cardStyle = (isSelected) => ({
@@ -168,7 +210,9 @@ export default function UtsavsPage() {
                     )}
 
                     {utsavs.map((utsav, i) => {
-                        const progress = utsav.targetAmount > 0 ? 0 : 0; // TODO calculate actual progress from summary
+                        const progress = utsav.targetAmount > 0
+                            ? Math.min(Math.round(((utsav.totalAmount || 0) / utsav.targetAmount) * 100), 100)
+                            : 0;
                         const isSelected = selected?._id === utsav._id;
 
                         return (
@@ -185,8 +229,8 @@ export default function UtsavsPage() {
                                         {/* Temple icon */}
                                         <div style={{
                                             width: 48, height: 48, borderRadius: 16, flexShrink: 0,
-                                            background: utsav.isActive ? 'linear-gradient(135deg, #FF8534, #FF6B00)' : 'linear-gradient(135deg, #9CA3AF, #6B7280)',
-                                            boxShadow: utsav.isActive ? '0 4px 14px rgba(255,107,0,0.40)' : 'none',
+                                            background: utsav.status === 'active' ? 'linear-gradient(135deg, #FF8534, #FF6B00)' : 'linear-gradient(135deg, #9CA3AF, #6B7280)',
+                                            boxShadow: utsav.status === 'active' ? '0 4px 14px rgba(255,107,0,0.40)' : 'none',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
                                         }}>🛕</div>
 
@@ -195,8 +239,8 @@ export default function UtsavsPage() {
                                                 <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: 0 }}>
                                                     {lang === 'hi' && utsav.nameHi ? utsav.nameHi : utsav.name}
                                                 </h3>
-                                                <Badge variant={utsav.isActive ? 'active' : 'inactive'} showDot>
-                                                    {utsav.isActive ? (lang === 'hi' ? 'सक्रिय' : 'Active') : (lang === 'hi' ? 'निष्क्रिय' : 'Inactive')}
+                                                <Badge variant={utsav.status === 'active' ? 'active' : 'inactive'} showDot>
+                                                    {utsav.status === 'active' ? (lang === 'hi' ? 'सक्रिय' : 'Active') : (lang === 'hi' ? 'निष्क्रिय' : 'Inactive')}
                                                 </Badge>
                                             </div>
                                             <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginTop: 3 }}>
@@ -209,8 +253,8 @@ export default function UtsavsPage() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}
                                         onClick={(e) => e.stopPropagation()}>
                                         <button onClick={() => handleToggleActive(utsav)}
-                                            className={`clay-btn ${utsav.isActive ? 'clay-btn-secondary' : 'clay-btn-primary'} !text-xs !px-3 !py-1.5 rounded-xl`}>
-                                            {utsav.isActive ? (lang === 'hi' ? 'निष्क्रिय करें' : 'Deactivate') : (lang === 'hi' ? 'सक्रिय करें' : 'Activate')}
+                                            className={`clay-btn ${utsav.status === 'active' ? 'clay-btn-secondary' : 'clay-btn-primary'} !text-xs !px-3 !py-1.5 rounded-xl`}>
+                                            {utsav.status === 'active' ? (lang === 'hi' ? 'निष्क्रिय करें' : 'Deactivate') : (lang === 'hi' ? 'सक्रिय करें' : 'Activate')}
                                         </button>
                                         {canCreate && (
                                             <>
@@ -238,7 +282,7 @@ export default function UtsavsPage() {
                                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 13 }}>
                                             <span style={{ color: '#1F2937', fontWeight: 600 }}>
                                                 {lang === 'hi' ? 'संग्रहित' : 'Collected'}:{' '}
-                                                <span style={{ color: '#EA580C', fontWeight: 700 }}>{formatINR(summary.total)}</span>
+                                                <span style={{ color: '#EA580C', fontWeight: 700 }}>{formatINR(utsav.totalAmount || 0)}</span>
                                             </span>
                                             <span style={{ color: '#1F2937', fontWeight: 600 }}>
                                                 {lang === 'hi' ? 'लक्ष्य' : 'Target'}:{' '}
@@ -255,7 +299,7 @@ export default function UtsavsPage() {
                                             }} />
                                         </div>
                                         <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginTop: 6 }}>
-                                            {progress}% · {summary.count} {lang === 'hi' ? 'दानकर्ता' : 'donors'}
+                                            {progress}% · {utsav.donorCount || 0} {lang === 'hi' ? 'दानकर्ता' : 'donors'}
                                         </p>
                                     </div>
                                 )}
@@ -309,11 +353,11 @@ export default function UtsavsPage() {
                                     </p>
                                 )}
                                 {selectedSummary?.donations.map((d) => (
-                                    <div key={d.id} className="flex items-center justify-between p-2.5 rounded-xl"
+                                    <div key={d._id} className="flex items-center justify-between p-2.5 rounded-xl"
                                         style={{ background: 'linear-gradient(145deg, #FAF7F4, #F5F0EB)', boxShadow: 'var(--clay-shadow-sm)', border: '1px solid rgba(0,0,0,0.07)' }}>
                                         <div>
                                             <p className="text-xs font-semibold" style={{ color: '#111827' }}>{d.donorName}</p>
-                                            <p className="text-xs font-medium" style={{ color: '#6B7280' }}>{d.receiptNo}</p>
+                                            <p className="text-xs font-medium" style={{ color: '#6B7280' }}>{d.receiptNumber}</p>
                                         </div>
                                         <span className="text-sm font-bold" style={{ color: '#EA580C' }}>{formatINR(d.amount)}</span>
                                     </div>
@@ -380,7 +424,7 @@ export default function UtsavsPage() {
                     </div>
                     <div className="flex items-center gap-3 p-3 rounded-xl"
                         style={{ background: 'linear-gradient(145deg, #F0FDF4, #DCFCE7)', border: '1px solid rgba(34,197,94,0.20)' }}>
-                        <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => set('isActive', e.target.checked)}
+                        <input type="checkbox" id="isActive" checked={form.status === 'active'} onChange={(e) => set('status', e.target.checked ? 'active' : 'completed')}
                             className="w-4 h-4 rounded accent-[var(--saffron)]" />
                         <label htmlFor="isActive" className="text-sm font-semibold" style={{ color: '#166534' }}>
                             {lang === 'hi' ? 'इस उत्सव के लिए दान स्वीकार करें (सक्रिय)' : 'Accept donations for this Utsav (Active)'}
