@@ -124,11 +124,11 @@ export default function Sidebar({ mobileOpen, onClose, pendingCount = 0 }) {
 
             <aside
                 className={[
-                    'clay-sidebar fixed left-0 top-0 h-full z-50 flex flex-col transition-transform duration-300',
-                    'lg:translate-x-0 lg:static lg:z-auto',
+                    'clay-sidebar fixed inset-y-0 left-0 z-50 flex flex-col transition-transform duration-300',
+                    'lg:translate-x-0',
                     mobileOpen ? 'translate-x-0' : '-translate-x-full',
                 ].join(' ')}
-                style={{ width: 'var(--sidebar-w)' }}
+                style={{ width: 'var(--sidebar-w)', flexShrink: 0 }}
             >
                 {/* Logo */}
                 <div className="flex items-center gap-3 px-5 py-5 flex-shrink-0"

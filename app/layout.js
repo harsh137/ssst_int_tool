@@ -9,6 +9,13 @@ export const metadata = {
   description: 'Internal management system for Shri Shyam Sarnam Seva Trust. Jai Shri Shyam.',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

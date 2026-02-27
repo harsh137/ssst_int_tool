@@ -8,7 +8,10 @@ export default function DashboardLayout({ children, pendingCount = 0 }) {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
-        <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-page)' }}>
+        <div className="flex h-screen w-full overflow-hidden" style={{ background: 'var(--bg-page)' }}>
+            {/* Desktop spacer - reserves space for the fixed sidebar */}
+            <div className="hidden lg:block flex-shrink-0" style={{ width: 'var(--sidebar-w)' }} />
+
             <Sidebar
                 mobileOpen={mobileOpen}
                 onClose={() => setMobileOpen(false)}
@@ -16,7 +19,7 @@ export default function DashboardLayout({ children, pendingCount = 0 }) {
             />
 
             {/* Main column */}
-            <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <div className="flex flex-col flex-1 min-w-0 w-full overflow-hidden">
                 <Topbar
                     onMenuClick={() => setMobileOpen(true)}
                     pendingCount={pendingCount}
