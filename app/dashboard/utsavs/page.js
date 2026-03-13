@@ -8,6 +8,7 @@ import Modal, { ConfirmModal } from '@/components/ui/Modal';
 import { formatINR, formatDate } from '@/lib/data/mockData';
 import Badge from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
+import { Landmark, Pointer, Pencil, Trash2, Calendar } from 'lucide-react';
 
 const EMPTY_FORM = {
     name: '', nameHi: '', description: '',
@@ -202,7 +203,9 @@ export default function UtsavsPage() {
                 <div className="xl:col-span-2 space-y-4">
                     {utsavs.length === 0 && (
                         <div style={cardStyle(false)} className="text-center">
-                            <p className="text-4xl mb-3">🛕</p>
+                            <div className="flex justify-center mb-3 text-gray-400 mt-2">
+                                <Landmark size={44} strokeWidth={1.2} />
+                            </div>
                             <p style={{ color: '#6B7280', fontWeight: 500 }}>
                                 {lang === 'hi' ? 'कोई उत्सव नहीं मिला' : 'No Utsavs found'}
                             </p>
@@ -226,13 +229,14 @@ export default function UtsavsPage() {
                                 {/* Top row */}
                                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-                                        {/* Temple icon */}
                                         <div style={{
                                             width: 48, height: 48, borderRadius: 16, flexShrink: 0,
                                             background: utsav.status === 'active' ? 'linear-gradient(135deg, #FF8534, #FF6B00)' : 'linear-gradient(135deg, #9CA3AF, #6B7280)',
                                             boxShadow: utsav.status === 'active' ? '0 4px 14px rgba(255,107,0,0.40)' : 'none',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
-                                        }}>🛕</div>
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white',
+                                        }}>
+                                            <Landmark size={24} strokeWidth={1.5} />
+                                        </div>
 
                                         <div style={{ minWidth: 0 }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -243,8 +247,8 @@ export default function UtsavsPage() {
                                                     {utsav.status === 'active' ? (lang === 'hi' ? 'सक्रिय' : 'Active') : (lang === 'hi' ? 'निष्क्रिय' : 'Inactive')}
                                                 </Badge>
                                             </div>
-                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginTop: 3 }}>
-                                                📅 {formatDate(utsav.startDate)} → {formatDate(utsav.endDate)}
+                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginTop: 3, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                <Calendar size={14} strokeWidth={2} /> {formatDate(utsav.startDate)} → {formatDate(utsav.endDate)}
                                             </p>
                                         </div>
                                     </div>
@@ -259,14 +263,12 @@ export default function UtsavsPage() {
                                         {canCreate && (
                                             <>
                                                 <button onClick={() => openEdit(utsav)}
-                                                    className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl"
-                                                    style={{ color: '#2563EB' }}>
-                                                    <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M1 12l9-9 2 2-9 9H1v-2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
+                                                    className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl text-blue-500 hover:text-blue-600">
+                                                    <Pencil size={14} strokeWidth={2} />
                                                 </button>
                                                 <button onClick={() => setDeleteTarget(utsav)}
-                                                    className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl"
-                                                    style={{ color: '#DC2626' }}>
-                                                    <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M2 3h9M5 3V2h3v1M4 3v8h5V3H4z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                                    className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl text-red-500 hover:text-red-600">
+                                                    <Trash2 size={15} strokeWidth={2} />
                                                 </button>
                                             </>
                                         )}
@@ -319,7 +321,9 @@ export default function UtsavsPage() {
                 <div className="clay-card p-5">
                     {!selected ? (
                         <div className="text-center py-8">
-                            <p className="text-3xl mb-2">👆</p>
+                            <div className="flex justify-center mb-3 text-gray-400">
+                                <Pointer size={40} strokeWidth={1} />
+                            </div>
                             <p className="text-sm font-medium" style={{ color: '#6B7280' }}>
                                 {lang === 'hi' ? 'विवरण देखने के लिए किसी उत्सव पर क्लिक करें' : 'Click an Utsav to see donation details'}
                             </p>

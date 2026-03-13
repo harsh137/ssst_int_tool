@@ -10,6 +10,7 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Modal, { ConfirmModal } from '@/components/ui/Modal';
 import { toast } from '@/components/ui/Toast';
+import { Eye, Check, X, Trash2, FileText, ExternalLink } from 'lucide-react';
 
 const TABS = [
     { key: 'all', labelEn: 'All', labelHi: 'सभी' },
@@ -172,28 +173,25 @@ export default function ExpensesPage() {
                                             {/* ── View Bill button ── */}
                                             <button onClick={() => setBillTarget(e)} title={lang === 'hi' ? 'बिल देखें' : 'View Bill'}
                                                 className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 text-blue-500 transition-colors">
-                                                <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
-                                                    <path d="M1 7s2.5-4 6-4 6 4 6 4-2.5 4-6 4-6-4-6-4z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-                                                    <circle cx="7" cy="7" r="1.5" stroke="currentColor" strokeWidth="1.2" />
-                                                </svg>
+                                                <Eye size={15} strokeWidth={2} />
                                             </button>
 
                                             {canApprove && e.status === 'pending' && (
                                                 <>
                                                     <button onClick={() => handleApprove(e)} title="Approve"
                                                         className="flex items-center gap-1 px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg transition-colors">
-                                                        ✓ {lang === 'hi' ? 'स्वीकृत' : 'Approve'}
+                                                        <Check size={14} strokeWidth={2.5} /> {lang === 'hi' ? 'स्वीकृत' : 'Approve'}
                                                     </button>
                                                     <button onClick={() => { setRejectTarget(e); setRejectReason(''); }} title="Reject"
                                                         className="flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium rounded-lg transition-colors">
-                                                        ✕ {lang === 'hi' ? 'अस्वीकार' : 'Reject'}
+                                                        <X size={14} strokeWidth={2.5} /> {lang === 'hi' ? 'अस्वीकार' : 'Reject'}
                                                     </button>
                                                 </>
                                             )}
                                             {canDelete && (
                                                 <button onClick={() => setDeleteTarget(e)} title="Delete"
-                                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-red-400 transition-colors">
-                                                    <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M2 3h9M5 3V2h3v1M4 3v8h5V3H4z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-red-500 transition-colors">
+                                                    <Trash2 size={15} strokeWidth={2} />
                                                 </button>
                                             )}
                                         </div>
@@ -226,13 +224,15 @@ export default function ExpensesPage() {
                                 <a href={billTarget.billImageUrl} target="_blank" rel="noopener noreferrer"
                                     className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold"
                                     style={{ color: '#2563EB' }}>
-                                    🔗 {lang === 'hi' ? 'नई टैब में खोलें' : 'Open in new tab'}
+                                    <ExternalLink size={14} strokeWidth={2} /> {lang === 'hi' ? 'नई टैब में खोलें' : 'Open in new tab'}
                                 </a>
                             </div>
                         ) : (
                             <div className="text-center py-10 rounded-xl"
                                 style={{ background: 'linear-gradient(145deg, #F5F3F0, #EDE9E3)' }}>
-                                <p className="text-3xl mb-2">📄</p>
+                                <div className="flex justify-center mb-3 text-gray-400">
+                                    <FileText size={40} strokeWidth={1} />
+                                </div>
                                 <p className="text-sm font-semibold" style={{ color: '#6B7280' }}>
                                     {lang === 'hi' ? 'कोई बिल अपलोड नहीं किया गया' : 'No bill / voucher uploaded for this expense'}
                                 </p>

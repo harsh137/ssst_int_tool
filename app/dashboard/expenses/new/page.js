@@ -7,6 +7,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { toast } from '@/components/ui/Toast';
 import Button from '@/components/ui/Button';
+import { Check, Paperclip, Hourglass } from 'lucide-react';
 
 const CAT_OPTS = [
     { value: 'tent', label: 'Tent & Canopy', labelHi: 'तंबू और छतरी' },
@@ -183,12 +184,14 @@ export default function NewExpensePage() {
                                             {lang === 'hi' ? 'अपलोड हो रहा है...' : 'Uploading...'}
                                         </p>
                                     ) : (
-                                        <p className="text-xs font-semibold text-emerald-600">✓ {lang === 'hi' ? 'अपलोड हो गया (बदलें)' : 'Uploaded (Click to change)'}</p>
+                                        <p className="text-xs font-semibold text-emerald-600 flex items-center justify-center gap-1">
+                                            <Check size={14} strokeWidth={3} /> {lang === 'hi' ? 'अपलोड हो गया (बदलें)' : 'Uploaded (Click to change)'}
+                                        </p>
                                     )}
                                 </div>
                             ) : (
                                 <>
-                                    <span className="text-3xl">📎</span>
+                                    <Paperclip size={32} strokeWidth={1.5} className="text-gray-400 mb-2" />
                                     <div className="text-center">
                                         <p className="text-sm font-medium text-[var(--text-secondary)]">{t('uploadBill')}</p>
                                         <p className="text-xs text-[var(--text-muted)] mt-0.5">JPG, PNG, or PDF (Cloudinary)</p>
@@ -207,7 +210,7 @@ export default function NewExpensePage() {
 
                     {/* Pending notice */}
                     <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-[var(--radius-md)] px-3 py-2.5">
-                        <span className="mt-0.5">⏳</span>
+                        <Hourglass size={16} strokeWidth={2} className="text-amber-600 mt-0.5" />
                         <p className="text-xs text-amber-700">
                             {lang === 'hi' ? 'सबमिट करने के बाद यह "लंबित" रहेगा। Super Admin इसे स्वीकृत या अस्वीकार करेंगे।' : 'After submitting, this will be marked as "Pending" until Super Admin approves it.'}
                         </p>

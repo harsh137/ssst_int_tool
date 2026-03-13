@@ -6,6 +6,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { hasPermission, PERMISSIONS } from '@/lib/permissions';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { toast } from '@/components/ui/Toast';
+import { Lock, Smartphone, Check, SquareDashed, Upload, Trash2, Lightbulb } from 'lucide-react';
 
 export default function SettingsPage() {
     const { currentUser } = useAuth();
@@ -30,8 +31,8 @@ export default function SettingsPage() {
 
     if (!isSuperAdmin) {
         return (
-            <div className="clay-card p-10 text-center">
-                <p className="text-4xl mb-3">🔒</p>
+            <div className="clay-card p-10 text-center flex flex-col items-center">
+                <Lock size={48} strokeWidth={1} className="text-gray-400 mb-4" />
                 <p style={{ color: '#374151', fontWeight: 600 }}>
                     {lang === 'hi' ? 'केवल सुपर एडमिन के लिए' : 'Super Admin access only'}
                 </p>
@@ -109,9 +110,9 @@ export default function SettingsPage() {
             <div className="clay-card p-6 anim-fade-up delay-1">
                 {/* Section header */}
                 <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
                         style={{ background: 'linear-gradient(135deg, #FF8534, #FF6B00)', boxShadow: '0 4px 12px rgba(255,107,0,0.35)' }}>
-                        📱
+                        <Smartphone size={20} strokeWidth={2} />
                     </div>
                     <div>
                         <h2 className="font-bold" style={{ fontSize: 15, color: '#111827' }}>
@@ -137,13 +138,15 @@ export default function SettingsPage() {
                                     style={{ border: '2px solid rgba(0,0,0,0.10)', background: '#fff' }}
                                 />
                                 <div className="absolute -top-2 -right-2">
-                                    <span className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs">✓</span>
+                                    <span className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                                        <Check size={14} strokeWidth={3} />
+                                    </span>
                                 </div>
                             </div>
                         ) : (
                             <div className="w-44 h-44 rounded-2xl flex flex-col items-center justify-center"
                                 style={{ background: 'linear-gradient(145deg, #F3F3F3, #E8E4DF)', border: '2px dashed rgba(0,0,0,0.15)' }}>
-                                <span className="text-4xl mb-2">🔲</span>
+                                <SquareDashed size={40} strokeWidth={1} className="text-gray-400 mb-2" />
                                 <p className="text-xs font-medium text-center px-3" style={{ color: '#9CA3AF' }}>
                                     {lang === 'hi' ? 'कोई QR नहीं' : 'No QR uploaded'}
                                 </p>
@@ -172,14 +175,17 @@ export default function SettingsPage() {
                                         {lang === 'hi' ? 'अपलोड हो रहा है...' : 'Uploading...'}
                                     </>
                                 ) : (
-                                    <>📤 {settings.upiQrUrl ? (lang === 'hi' ? 'QR बदलें' : 'Replace QR') : (lang === 'hi' ? 'QR अपलोड करें' : 'Upload QR Code')}</>
+                                    <>
+                                        <Upload size={14} strokeWidth={2.5} />
+                                        {settings.upiQrUrl ? (lang === 'hi' ? 'QR बदलें' : 'Replace QR') : (lang === 'hi' ? 'QR अपलोड करें' : 'Upload QR')}
+                                    </>
                                 )}
                             </label>
 
                             {settings.upiQrUrl && (
-                                <button onClick={handleRemoveQr} className="clay-btn clay-btn-secondary !text-sm"
+                                <button onClick={handleRemoveQr} className="clay-btn clay-btn-secondary !text-sm flex items-center gap-1.5"
                                     style={{ color: '#DC2626' }}>
-                                    🗑 {lang === 'hi' ? 'हटाएँ' : 'Remove'}
+                                    <Trash2 size={14} strokeWidth={2.5} /> {lang === 'hi' ? 'हटाएँ' : 'Remove'}
                                 </button>
                             )}
                         </div>
@@ -188,11 +194,14 @@ export default function SettingsPage() {
                             <p className="text-sm text-red-600 font-medium">{uploadError}</p>
                         )}
 
-                        <div className="p-3 rounded-xl text-xs font-medium"
+                        <div className="p-3 rounded-xl text-xs font-medium flex gap-2 items-start"
                             style={{ background: 'linear-gradient(145deg, #FFF7ED, #FFEDD5)', border: '1px solid rgba(255,107,0,0.15)', color: '#92400E' }}>
-                            💡 {lang === 'hi'
-                                ? 'JPG, PNG फ़ॉर्मेट स्वीकार्य हैं। Cloudinary पर संग्रहीत।'
-                                : 'JPG, PNG formats accepted. Stored securely on Cloudinary.'}
+                            <Lightbulb size={16} strokeWidth={2} className="flex-shrink-0" />
+                            <span>
+                                {lang === 'hi'
+                                    ? 'JPG, PNG फ़ॉर्मेट स्वीकार्य हैं। Cloudinary पर संग्रहीत।'
+                                    : 'JPG, PNG formats accepted. Stored securely on Cloudinary.'}
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -59,6 +59,7 @@ export async function POST(req) {
             password: hashedPassword,
             role: data.role,
             permissions: data.permissions || [],
+            useRoleDefaults: data.useRoleDefaults !== undefined ? data.useRoleDefaults : true,
             isActive: true
         });
 

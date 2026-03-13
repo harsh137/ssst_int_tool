@@ -7,6 +7,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { toast } from '@/components/ui/Toast';
 import ReceiptModal from '@/components/donations/ReceiptModal';
+import { Check, Landmark, AlertTriangle, Paperclip, Info } from 'lucide-react';
 
 const STEPS = ['donorInfo', 'paymentInfo', 'review'];
 const FUND_OPTS = [
@@ -174,7 +175,7 @@ export default function NewDonationPage() {
                     <div key={sk} className="flex items-center gap-2 flex-1">
                         <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all"
                             style={{ background: i <= step ? 'linear-gradient(135deg, var(--saffron), var(--gold))' : 'linear-gradient(145deg, #E5E0D8, #EDE8E2)', color: i <= step ? 'white' : 'var(--text-muted)', boxShadow: i <= step ? '0 3px 10px rgba(255,107,0,0.35)' : 'var(--clay-shadow-sm)' }}>
-                            {i < step ? '✓' : i + 1}
+                            {i < step ? <Check size={14} strokeWidth={3} /> : i + 1}
                         </div>
                         <span className="text-xs font-semibold whitespace-nowrap" style={{ color: i === step ? 'var(--saffron)' : 'var(--text-muted)' }}>{t(sk)}</span>
                         {i < STEPS.length - 1 && (
@@ -251,8 +252,8 @@ export default function NewDonationPage() {
                         {/* ── Utsav Picker (only when fundType === 'utsav') ── */}
                         {form.fundType === 'utsav' && (
                             <div className="p-4 rounded-2xl" style={{ background: 'linear-gradient(145deg, #FFF8E7, #FFF3D6)', border: '1px solid rgba(245,166,35,0.25)' }}>
-                                <label className="text-xs font-bold uppercase tracking-wide mb-2.5 block" style={{ color: '#92400E' }}>
-                                    🛕 {t('selectUtsav')} *
+                                <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide mb-2.5" style={{ color: '#92400E' }}>
+                                    <Landmark size={14} strokeWidth={2.5} /> {t('selectUtsav')} *
                                 </label>
                                 {activeUtsavs.length === 0 ? (
                                     <p className="text-xs font-medium" style={{ color: '#92400E' }}>{t('noUtsavs')}</p>
@@ -271,13 +272,13 @@ export default function NewDonationPage() {
                                                     }}>
                                                     <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                                                         style={{ background: isSelected ? 'rgba(255,255,255,0.20)' : 'linear-gradient(135deg, #FFF3D6, #FFE8A0)' }}>
-                                                        🛕
+                                                        <Landmark size={16} strokeWidth={2.5} />
                                                     </div>
                                                     <div className="min-w-0 flex-1">
                                                         <p className="text-xs font-bold truncate">{lang === 'hi' && u.nameHi ? u.nameHi : u.name}</p>
                                                         <p className="text-[10px] mt-0.5 opacity-75">{u.startDate} → {u.endDate}</p>
                                                     </div>
-                                                    {isSelected && <span className="text-white text-sm">✓</span>}
+                                                    {isSelected && <span className="text-white flex items-center"><Check size={16} strokeWidth={3} /></span>}
                                                 </button>
                                             );
                                         })}
@@ -322,7 +323,7 @@ export default function NewDonationPage() {
                                         ) : (
                                             <div className="w-32 h-32 bg-white rounded-xl border border-dashed flex flex-col items-center justify-center text-center p-2"
                                                 style={{ borderColor: 'rgba(0,0,0,0.15)' }}>
-                                                <span className="text-2xl mb-1">⚠️</span>
+                                                <AlertTriangle size={24} strokeWidth={1.5} className="text-gray-400 mb-1" />
                                                 <p className="text-[10px] font-semibold text-gray-500">
                                                     {lang === 'hi' ? 'Super Admin ने QR अपलोड नहीं किया है' : 'QR not uploaded by Super Admin'}
                                                 </p>
@@ -348,8 +349,10 @@ export default function NewDonationPage() {
                                             <label className="flex items-center gap-3 bg-white px-3 py-2 rounded-xl border border-blue-200 hover:border-blue-400 cursor-pointer transition-colors text-sm font-medium" style={{ color: '#2563EB' }}>
                                                 {upiUploading ? (
                                                     <span className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full anim-spin" />
-                                                ) : <span>📎</span>}
-                                                {form.upiScreenshotUrl ? (lang === 'hi' ? 'अपलोड हो गया (बदलें)' : 'Uploaded (Click to change)') : (lang === 'hi' ? 'स्क्रीनशॉट अपलोड करें' : 'Upload Screenshot')}
+                                                ) : <Paperclip size={16} strokeWidth={2} />}
+                                                {form.upiScreenshotUrl ? (
+                                                    <span className="flex items-center gap-1.5"><Check size={14} strokeWidth={3} className="text-emerald-600" /> {lang === 'hi' ? 'अपलोड हो गया (बदलें)' : 'Uploaded (Click to change)'}</span>
+                                                ) : (lang === 'hi' ? 'स्क्रीनशॉट अपलोड करें' : 'Upload Screenshot')}
                                                 <input type="file" accept="image/*" className="hidden" onChange={handleUpiScreenshot} />
                                             </label>
                                             {upiPreview && !form.upiScreenshotUrl && (
@@ -399,7 +402,7 @@ export default function NewDonationPage() {
                             ))}
                         </div>
                         <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)', border: '1px solid rgba(245,158,11,0.25)' }}>
-                            <span>ℹ️</span>
+                            <Info size={16} strokeWidth={2} className="text-amber-600 flex-shrink-0" />
                             <p className="text-xs font-medium" style={{ color: '#92400E' }}>
                                 {lang === 'hi' ? 'सबमिट के बाद रिकॉर्ड लॉक। केवल Super Admin बदलाव कर सकते हैं।' : 'Record is locked after submission. Only Super Admin can edit.'}
                             </p>

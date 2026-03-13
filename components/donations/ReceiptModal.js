@@ -4,6 +4,7 @@ import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 import { toast } from '@/components/ui/Toast';
 import { useLang } from '@/lib/context/LangContext';
+import { Landmark, Printer, MessageCircle } from 'lucide-react';
 
 // Helper functions inline to avoid mockData dependency
 const formatINR = (amount) => {
@@ -96,10 +97,12 @@ export default function ReceiptModal({ donation, onClose }) {
             <body>
                 <div class="receipt-wrapper">
                     <div class="trust-header">
-                        <div class="trust-icon">🛕</div>
+                        <div class="trust-icon" style="display: flex; justify-content: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
                         <div class="trust-name-hi">श्री श्याम शरणम् सेवा ट्रस्ट</div>
                         <div class="trust-name-en">Shri Shyam Sarnam Seva Trust</div>
-                        <div class="tagline">🙏 Jai Shri Shyam</div>
+                        <div class="tagline">Jai Shri Shyam</div>
                     </div>
 
                     <div class="receipt-row">
@@ -144,7 +147,7 @@ export default function ReceiptModal({ donation, onClose }) {
                     ${donation.notes ? `<p style="margin-top:12px; font-size:11px; color:#9CA3AF; text-align:center">${donation.notes}</p>` : ''}
 
                     <div class="footer">
-                        <p>Thank you for your generous donation 🙏</p>
+                        <p>Thank you for your generous donation</p>
                         <p>This receipt is a valid proof of donation.</p>
                     </div>
                 </div>
@@ -159,7 +162,7 @@ export default function ReceiptModal({ donation, onClose }) {
 
     const handleWhatsApp = () => {
         const msg = encodeURIComponent(
-            `🙏 Jai Shri Shyam!\n\nDear ${donation.donorName},\n\nThank you for your generous donation to *Shri Shyam Sarnam Seva Trust*.\n\n📄 Receipt No: *${receiptNo}*\n💰 Amount: *${formatINR(donation.amount)}*\n📅 Date: *${formatDate(donation.date)}*\n🏦 Payment: *${payLabel[donation.paymentMode] || donation.paymentMode}*\n\nJai Shri Shyam 🙏`
+            `Jai Shri Shyam!\n\nDear ${donation.donorName},\n\nThank you for your generous donation to *Shri Shyam Sarnam Seva Trust*.\n\nReceipt No: *${receiptNo}*\nAmount: *${formatINR(donation.amount)}*\nDate: *${formatDate(donation.date)}*\nPayment: *${payLabel[donation.paymentMode] || donation.paymentMode}*\n\nJai Shri Shyam`
         );
         const mobile = donation.mobile ? `91${donation.mobile}` : '';
         window.open(`https://wa.me/${mobile}?text=${msg}`, '_blank');
@@ -174,15 +177,15 @@ export default function ReceiptModal({ donation, onClose }) {
             <div className="border-2 border-dashed border-orange-200 rounded-[var(--radius-lg)] p-6 mb-4 bg-orange-50/30">
                 {/* Trust Header */}
                 <div className="text-center mb-5 pb-4 border-b border-orange-200">
-                    <div className="w-14 h-14 mx-auto mb-2 rounded-full flex items-center justify-center text-2xl"
+                    <div className="w-14 h-14 mx-auto mb-2 rounded-full flex items-center justify-center text-white"
                         style={{ background: 'linear-gradient(135deg, var(--saffron), var(--gold))' }}>
-                        🛕
+                        <Landmark size={24} strokeWidth={1.5} />
                     </div>
                     <h2 className="font-bold text-[var(--text-primary)] text-lg" style={{ fontFamily: 'Noto Sans Devanagari, sans-serif' }}>
                         श्री श्याम शरणम् सेवा ट्रस्ट
                     </h2>
                     <p className="text-sm text-[var(--text-secondary)]">Shri Shyam Sarnam Seva Trust</p>
-                    <p className="text-xs text-[var(--text-muted)] mt-1">🙏 Jai Shri Shyam</p>
+                    <p className="text-xs text-[var(--text-muted)] mt-1">Jai Shri Shyam</p>
                 </div>
 
                 {/* Receipt Header Row */}
@@ -228,7 +231,7 @@ export default function ReceiptModal({ donation, onClose }) {
                 {/* Footer */}
                 <div className="mt-4 pt-3 border-t border-orange-200 text-center">
                     <p className="text-xs text-[var(--text-muted)]">
-                        {lang === 'hi' ? 'आपके दान के लिए हार्दिक धन्यवाद 🙏' : 'Thank you for your generous donation 🙏'}
+                        {lang === 'hi' ? 'आपके दान के लिए हार्दिक धन्यवाद' : 'Thank you for your generous donation'}
                     </p>
                     <p className="text-xs text-[var(--text-muted)] mt-1">
                         {lang === 'hi' ? 'यह रसीद वैध प्रमाण है।' : 'This receipt is a valid proof of donation.'}
@@ -236,10 +239,9 @@ export default function ReceiptModal({ donation, onClose }) {
                 </div>
             </div>
 
-            {/* Actions */}
             <div className="flex gap-2 flex-col sm:flex-row">
-                <Button onClick={handlePrint} variant="primary" fullWidth icon={<span>🖨️</span>}>{t('downloadReceipt')}</Button>
-                <Button onClick={handleWhatsApp} variant="success" fullWidth icon={<span>💬</span>}>{t('sendWhatsApp')}</Button>
+                <Button onClick={handlePrint} variant="primary" fullWidth icon={<Printer size={16} />}>{t('downloadReceipt')}</Button>
+                <Button onClick={handleWhatsApp} variant="success" fullWidth icon={<MessageCircle size={16} />}>{t('sendWhatsApp')}</Button>
             </div>
         </Modal>
     );

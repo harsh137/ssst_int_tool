@@ -7,6 +7,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { toast } from '@/components/ui/Toast';
 import { formatINR, formatDate } from '@/lib/data/mockData';
+import { Check, Paperclip } from 'lucide-react';
 
 const STEPS = ['donorInfo', 'paymentInfo', 'review'];
 const FUND_OPTS = [
@@ -199,7 +200,7 @@ export default function EditDonationPage() {
                     <div key={sk} className="flex items-center gap-2 flex-1">
                         <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all"
                             style={{ background: i <= step ? 'linear-gradient(135deg, var(--saffron), var(--gold))' : 'linear-gradient(145deg, #E5E0D8, #EDE8E2)', color: i <= step ? 'white' : 'var(--text-muted)', boxShadow: i <= step ? '0 3px 10px rgba(255,107,0,0.35)' : 'var(--clay-shadow-sm)' }}>
-                            {i < step ? '✓' : i + 1}
+                            {i < step ? <Check size={14} strokeWidth={3} /> : i + 1}
                         </div>
                         <span className="text-xs font-semibold whitespace-nowrap" style={{ color: i === step ? 'var(--saffron)' : 'var(--text-muted)' }}>{t(sk)}</span>
                         {i < STEPS.length - 1 && (
@@ -348,7 +349,7 @@ export default function EditDonationPage() {
                                             </div>
                                         )}
                                         <label className="flex-1 flex flex-col items-center justify-center py-4 border-2 border-dashed border-orange-300 rounded-xl bg-orange-50/50 hover:bg-orange-100 transition-colors cursor-pointer text-orange-600">
-                                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" className="mb-1"><path d="M12 4v12M8 8l4-4 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                            <Paperclip size={20} strokeWidth={2} className="mb-1" />
                                             <span className="text-xs font-bold">{lang === 'hi' ? 'गैलरी से अपलोड करें' : 'Upload Receipt'}</span>
                                             <input type="file" accept="image/*" className="hidden" onChange={handleUpiScreenshot} />
                                         </label>

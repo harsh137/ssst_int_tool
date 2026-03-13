@@ -12,6 +12,7 @@ import { ConfirmModal } from '@/components/ui/Modal';
 import { toast } from '@/components/ui/Toast';
 import ReceiptModal from '@/components/donations/ReceiptModal';
 import { generatePDFReceipt } from '@/lib/pdfGenerator';
+import { Download, Pencil, Trash2 } from 'lucide-react';
 
 const FUND_OPTIONS = [
     { value: 'general', label: 'General', labelHi: 'सामान्य' },
@@ -166,19 +167,19 @@ export default function DonationsPage() {
                                                 await generatePDFReceipt(d);
                                             }} title="Download Receipt"
                                                 className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-orange-100 text-[var(--saffron)] transition-colors text-sm">
-                                                ⬇️
+                                                <Download size={15} strokeWidth={2} />
                                             </button>
                                             {canEdit && (
                                                 <Link href={`/dashboard/donations/${d._id}/edit`}>
                                                     <button title="Edit" className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 text-blue-500 transition-colors">
-                                                        <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M1 12l9-9 2 2-9 9H1v-2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
+                                                        <Pencil size={14} strokeWidth={2} />
                                                     </button>
                                                 </Link>
                                             )}
                                             {canDelete && (
                                                 <button onClick={() => setDeleteTarget(d)} title="Delete"
-                                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-red-400 transition-colors">
-                                                    <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M2 3h9M5 3V2h3v1M4 3v8h5V3H4z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-red-500 transition-colors">
+                                                    <Trash2 size={15} strokeWidth={2} />
                                                 </button>
                                             )}
                                         </div>

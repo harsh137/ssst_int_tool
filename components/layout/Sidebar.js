@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
 import { useLang } from '@/lib/context/LangContext';
 import { hasPermission, PERMISSIONS, ROLES } from '@/lib/permissions';
+import { Landmark } from 'lucide-react';
 
 const NAV = [
     {
@@ -133,16 +134,16 @@ export default function Sidebar({ mobileOpen, onClose, pendingCount = 0 }) {
                 {/* Logo */}
                 <div className="flex items-center gap-3 px-5 py-5 flex-shrink-0"
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-lg"
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-lg"
                         style={{ background: 'linear-gradient(135deg, #FF8534 0%, #FF6B00 60%, #F5A623 100%)', boxShadow: '0 4px 14px rgba(255,107,0,0.45)' }}>
-                        🛕
+                        <Landmark size={20} strokeWidth={1.5} />
                     </div>
                     <div className="min-w-0">
                         <p className="text-white font-bold text-sm leading-tight" style={{ fontFamily: lang === 'hi' ? 'var(--font-hindi)' : 'inherit' }}>
                             {lang === 'hi' ? 'श्री श्याम शरणम्' : 'SSST Internal'}
                         </p>
                         <p className="text-xs mt-0.5" style={{ color: 'rgba(255,166,50,0.85)' }}>
-                            {lang === 'hi' ? 'जय श्री श्याम' : 'Jai Shri Shyam 🙏'}
+                            {lang === 'hi' ? 'जय श्री श्याम' : 'Jai Shri Shyam'}
                         </p>
                     </div>
                 </div>

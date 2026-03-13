@@ -14,7 +14,7 @@ export default function Topbar({ onMenuClick, pendingCount = 0 }) {
 
     const handleLogout = async () => {
         await logout();
-        toast.info('Logged out. Jai Shri Shyam! 🙏');
+        toast.info('Logged out. Jai Shri Shyam!');
     };
 
     return (
@@ -26,7 +26,7 @@ export default function Topbar({ onMenuClick, pendingCount = 0 }) {
             }}>
 
             {/* Left */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 lg:hidden">
                 <button onClick={onMenuClick}
                     className="clay-btn clay-btn-ghost w-9 h-9 !p-0 rounded-xl lg:hidden">
                     <svg width="17" height="17" fill="none" viewBox="0 0 17 17">
@@ -45,7 +45,7 @@ export default function Topbar({ onMenuClick, pendingCount = 0 }) {
             </div>
 
             {/* Right */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-auto">
                 {/* Language Toggle */}
                 <button onClick={toggleLang}
                     className="clay-btn clay-btn-secondary !px-3 !py-1.5 !text-xs rounded-full">

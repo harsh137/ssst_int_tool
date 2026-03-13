@@ -7,6 +7,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { hasPermission, PERMISSIONS } from '@/lib/permissions';
 import { formatINR, formatDate } from '@/lib/data/mockData';
 import Badge from '@/components/ui/Badge';
+import { WalletCards, ChartBar, Landmark, Hourglass } from 'lucide-react';
 
 export default function DashboardPage() {
     const { currentUser } = useAuth();
@@ -41,10 +42,10 @@ export default function DashboardPage() {
     const fundTotal = summary ? Object.values(summary.fundBreakdown).reduce((a, b) => a + b, 0) : 1;
 
     const stats = [
-        { label: t('totalDonations'), labelHi: 'कुल दान', value: summary ? formatINR(summary.totalDonations) : '—', icon: '💰', variant: 'clay-stat-saffron', delay: '' },
-        { label: t('totalExpenses'), labelHi: 'कुल व्यय', value: summary ? formatINR(summary.totalExpenses) : '—', icon: '📊', variant: 'clay-stat-blue', delay: 'delay-1' },
-        { label: t('netBalance'), labelHi: 'शुद्ध शेष', value: summary ? formatINR(summary.netBalance) : '—', icon: '🏦', variant: 'clay-stat-emerald', delay: 'delay-2' },
-        { label: t('pendingApprovals'), labelHi: 'लंबित अनुमोदन', value: summary ? summary.pendingCount : '—', icon: '⏳', variant: 'clay-stat-purple', delay: 'delay-3' },
+        { label: t('totalDonations'), labelHi: 'कुल दान', value: summary ? formatINR(summary.totalDonations) : '—', icon: <WalletCards size={24} />, variant: 'clay-stat-saffron', delay: '' },
+        { label: t('totalExpenses'), labelHi: 'कुल व्यय', value: summary ? formatINR(summary.totalExpenses) : '—', icon: <ChartBar size={24} />, variant: 'clay-stat-blue', delay: 'delay-1' },
+        { label: t('netBalance'), labelHi: 'शुद्ध शेष', value: summary ? formatINR(summary.netBalance) : '—', icon: <Landmark size={24} />, variant: 'clay-stat-emerald', delay: 'delay-2' },
+        { label: t('pendingApprovals'), labelHi: 'लंबित अनुमोदन', value: summary ? summary.pendingCount : '—', icon: <Hourglass size={24} />, variant: 'clay-stat-purple', delay: 'delay-3' },
     ];
 
     return (
@@ -54,7 +55,7 @@ export default function DashboardPage() {
                 <div>
                     <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('dashboard')}</h1>
                     <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                        {lang === 'hi' ? 'जय श्री श्याम 🙏 — आज का सारांश' : 'Jai Shri Shyam 🙏 — Today\'s Overview'}
+                        {lang === 'hi' ? 'जय श्री श्याम — आज का सारांश' : 'Jai Shri Shyam — Today\'s Overview'}
                     </p>
                 </div>
                 <div className="flex gap-2">

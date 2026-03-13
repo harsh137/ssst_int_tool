@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
 import { generatePDFReceipt } from '@/lib/pdfGenerator';
+import { BarChart2, FileSpreadsheet, Folder, FileText } from 'lucide-react';
 
 const REPORT_TYPES = [
     { value: 'donations', labelEn: 'Donations Report', labelHi: 'दान रिपोर्ट' },
@@ -160,7 +161,7 @@ export default function ReportsPage() {
                         </div>
                     )}
                 </div>
-                <Button onClick={generateReport} loading={generating} disabled={generating} icon={<span>📊</span>}>{t('generateReport')}</Button>
+                <Button onClick={generateReport} loading={generating} disabled={generating} icon={<BarChart2 size={16} strokeWidth={2} />}>{t('generateReport')}</Button>
             </div>
 
             {/* Report Result */}
@@ -196,9 +197,9 @@ export default function ReportsPage() {
                         <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--border)] p-5 shadow-[var(--shadow-sm)]">
                             <p className="text-sm font-semibold text-[var(--text-primary)] mb-3">{lang === 'hi' ? 'रिपोर्ट निर्यात करें' : 'Export Report'}</p>
                             <div className="flex flex-wrap gap-2">
-                                <Button onClick={() => handleExport('excel')} variant="secondary" icon={<span>📊</span>}>{t('exportExcel')}</Button>
-                                <Button onClick={() => handleExport('tally')} variant="outline" icon={<span>📁</span>}>{t('exportTally')}</Button>
-                                <Button onClick={() => handleExport('pdf')} variant="secondary" icon={<span>📄</span>}>{t('exportPdf')}</Button>
+                                <Button onClick={() => handleExport('excel')} variant="secondary" icon={<FileSpreadsheet size={16} strokeWidth={2} />}>{t('exportExcel')}</Button>
+                                <Button onClick={() => handleExport('tally')} variant="outline" icon={<Folder size={16} strokeWidth={2} />}>{t('exportTally')}</Button>
+                                <Button onClick={() => handleExport('pdf')} variant="secondary" icon={<FileText size={16} strokeWidth={2} />}>{t('exportPdf')}</Button>
                             </div>
                         </div>
                     )}

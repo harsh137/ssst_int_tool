@@ -7,6 +7,7 @@ import { formatDate } from '@/lib/data/mockData'; // Has a time component ideall
 import Badge from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
 import { useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
 
 const ACTION_COLORS = {
     LOGIN: 'emerald', LOGOUT: 'gray',
@@ -114,7 +115,7 @@ export default function SystemLogsPage() {
                     <input type="text" placeholder={lang === 'hi' ? 'विवरण खोजें...' : 'Search details...'}
                         value={search} onChange={(e) => setSearch(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 text-sm border border-[var(--border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--saffron)]" />
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">🔍</span>
+                    <Search size={16} strokeWidth={2} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
                 </form>
             </div>
 

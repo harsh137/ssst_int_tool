@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { X } from 'lucide-react';
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }) {
     const sizeW = { sm: '420px', md: '560px', lg: '720px' }[size] ?? '560px';
@@ -25,9 +26,9 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
                     style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
                     <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
                     <button onClick={onClose}
-                        className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl text-sm"
+                        className="clay-btn clay-btn-ghost w-8 h-8 !p-0 rounded-xl flex items-center justify-center"
                         style={{ color: 'var(--text-muted)' }}>
-                        ✕
+                        <X size={16} strokeWidth={2.5} />
                     </button>
                 </div>
 

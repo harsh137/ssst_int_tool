@@ -7,6 +7,7 @@ import { useLang } from '@/lib/context/LangContext';
 import { ROLES, ROLE_DEFAULTS, PERMISSION_GROUPS, PERMISSIONS } from '@/lib/permissions';
 import Button from '@/components/ui/Button';
 import { toast } from '@/components/ui/Toast';
+import { AlertTriangle } from 'lucide-react';
 
 const ROLE_OPTS = Object.entries(ROLES).map(([value, r]) => ({ value, label: r.label, labelHi: r.labelHi }));
 
@@ -239,8 +240,8 @@ function NewUserForm() {
                                                         className={`flex items-center gap-2 p-2 rounded-[var(--radius-md)] cursor-pointer border transition-all ${checked ? (dangerous ? 'bg-red-50 border-red-200' : 'bg-green-50 border-emerald-200') : 'border-transparent hover:bg-gray-50'}`}>
                                                         <input type="checkbox" checked={checked} onChange={() => togglePermission(perm)}
                                                             className="w-3.5 h-3.5 rounded accent-[var(--saffron)] flex-shrink-0" />
-                                                        <span className={`text-xs font-medium flex-1 ${dangerous && checked ? 'text-red-700' : 'text-[var(--text-primary)]'}`}>
-                                                            {dangerous && '⚠️ '}{lang === 'hi' ? labelHi : label}
+                                                        <span className={`text-xs font-medium flex-1 flex items-center gap-1.5 ${dangerous && checked ? 'text-red-700' : 'text-[var(--text-primary)]'}`}>
+                                                            {dangerous && <AlertTriangle size={14} className="text-red-500" />} {lang === 'hi' ? labelHi : label}
                                                         </span>
                                                     </label>
                                                 );
@@ -249,7 +250,7 @@ function NewUserForm() {
                                         {/* Warning for dangerous permissions */}
                                         {group.permissions.some((p) => p.dangerous && form.permissions.includes(p.perm)) && (
                                             <div className="px-4 py-2 bg-red-50 border-t border-red-200">
-                                                <p className="text-xs text-red-600">⚠️ {t('dangerousPermWarning')}</p>
+                                                <p className="text-xs text-red-600 flex items-center gap-1.5"><AlertTriangle size={14} /> {t('dangerousPermWarning')}</p>
                                             </div>
                                         )}
                                     </div>

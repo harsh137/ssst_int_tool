@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
 
 const TOASTS = { listeners: [], emit(t) { this.listeners.forEach(fn => fn(t)); } };
 
@@ -12,10 +13,10 @@ export const toast = {
 };
 
 const CONFIGS = {
-    success: { icon: '✅', bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', color: '#166534', border: 'rgba(34,197,94,0.30)' },
-    error: { icon: '❌', bg: 'linear-gradient(135deg, #FFF1F2, #FFE4E6)', color: '#881337', border: 'rgba(239,68,68,0.30)' },
-    warning: { icon: '⚠️', bg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)', color: '#92400E', border: 'rgba(245,158,11,0.30)' },
-    info: { icon: 'ℹ️', bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', color: '#1E40AF', border: 'rgba(59,130,246,0.30)' },
+    success: { icon: <CheckCircle2 size={20} strokeWidth={2} />, bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', color: '#166534', border: 'rgba(34,197,94,0.30)' },
+    error: { icon: <XCircle size={20} strokeWidth={2} />, bg: 'linear-gradient(135deg, #FFF1F2, #FFE4E6)', color: '#881337', border: 'rgba(239,68,68,0.30)' },
+    warning: { icon: <AlertTriangle size={20} strokeWidth={2} />, bg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)', color: '#92400E', border: 'rgba(245,158,11,0.30)' },
+    info: { icon: <Info size={20} strokeWidth={2} />, bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', color: '#1E40AF', border: 'rgba(59,130,246,0.30)' },
 };
 
 function Toast({ toast: t, onRemove }) {
@@ -38,7 +39,9 @@ function Toast({ toast: t, onRemove }) {
             <span className="text-lg flex-shrink-0">{cfg.icon}</span>
             <span className="text-sm font-semibold flex-1">{t.msg}</span>
             <button onClick={() => onRemove(t.id)}
-                className="text-xs opacity-50 hover:opacity-100 transition-opacity ml-1">✕</button>
+                className="opacity-50 hover:opacity-100 transition-opacity ml-1 flex items-center justify-center">
+                <X size={14} strokeWidth={2.5} />
+            </button>
         </div>
     );
 }

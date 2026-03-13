@@ -303,7 +303,6 @@ body[lang="hi"],
 .clay-sidebar {
   background: linear-gradient(160deg, #1A1F36 0%, #252B45 100%);
   box-shadow: 8px 0 32px rgba(0, 0, 0, 0.18);
-  position: relative;
 }
 
 .clay-sidebar::after {
